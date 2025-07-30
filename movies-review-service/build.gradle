@@ -1,12 +1,20 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.3'
+	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
 
 group = 'com.reactivespring'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [
+        '--add-exports', 'jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
+				'--add-opens', 'jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED'
+    ]
+}
 
 configurations {
 	compileOnly {
@@ -24,14 +32,17 @@ dependencies {
 
 	//validator
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
 	//lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	// compileOnly 'org.projectlombok:lombok'
+	// annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.11.0'
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
