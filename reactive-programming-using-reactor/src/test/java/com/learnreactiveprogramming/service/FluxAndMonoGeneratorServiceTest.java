@@ -3,7 +3,6 @@ package com.learnreactiveprogramming.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
@@ -165,6 +164,203 @@ class FluxAndMonoGeneratorServiceTest {
     StepVerifier
       .create(namesMono)
       .expectNext("V", "A", "R", "S", "H", "I", "T", "H")
+      .verifyComplete();
+  }
+
+  @Test
+  void namesFlux_transform() {
+    //given
+    int stringLength = 3;
+
+    //when
+    var namesFlux = service.namesFlux_transform(stringLength);
+
+    //then
+    StepVerifier
+      .create(namesFlux)
+      .expectNext("B", "O", "B", "A", "C", "H", "O", "L", "E")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void namesFlux_transform_switchIfEmpty() {
+    //given
+    int stringLength = 6;
+
+    //when
+    var namesFlux = service.namesFlux_transform_switchIfEmpty(stringLength);
+
+    //then
+    StepVerifier
+      .create(namesFlux)
+      .expectNext("D", "E", "F", "A", "U", "L", "T")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_concat() {
+    //given
+
+    //when
+    var concatFlux = service.explore_concat();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("A", "B", "C", "D", "E", "F")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_concatWith_flux() {
+    //given
+
+    //when
+    var concatWithFlux = service.explore_concatWith_flux();
+
+    //then
+    StepVerifier
+      .create(concatWithFlux)
+      .expectNext("A", "B", "C", "D", "E", "F")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_concatWith_mono() {
+    //given
+
+    //when
+    var concatWithMono = service.explore_concatWith_mono();
+
+    //then
+    StepVerifier
+      .create(concatWithMono)
+      .expectNext("A", "B")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_merge() {
+    //given
+
+    //when
+    var concatFlux = service.explore_merge();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("A", "D", "B", "E", "C", "F")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_mergeWith() {
+    //given
+
+    //when
+    var concatFlux = service.explore_mergeWith();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("A", "D", "B", "E", "C", "F")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_mergeWith_mono() {
+    //given
+
+    //when
+    var concatMono = service.explore_mergeWith_mono();
+
+    //then
+    StepVerifier
+      .create(concatMono)
+      .expectNext("A", "D")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_mergeSequential() {
+    //given
+
+    //when
+    var concatFlux = service.explore_mergeSequential();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("A", "B", "C", "D", "E", "F")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_zip() {
+    //given
+
+    //when
+    var concatFlux = service.explore_zip();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("AD", "BE", "CF")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_zip_1() {
+    //given
+
+    //when
+    var concatFlux = service.explore_zip_1();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("AD14", "BE25", "CF36")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_zipWith() {
+    //given
+
+    //when
+    var concatFlux = service.explore_zipWith();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("AD", "BE", "CF")
+      // .expectNextCount(9)
+      .verifyComplete();
+  }
+
+  @Test
+  void explore_zipWith_mono() {
+    //given
+
+    //when
+    var concatFlux = service.explore_zipWith_mono();
+
+    //then
+    StepVerifier
+      .create(concatFlux)
+      .expectNext("AD")
+      // .expectNextCount(9)
       .verifyComplete();
   }
 }
