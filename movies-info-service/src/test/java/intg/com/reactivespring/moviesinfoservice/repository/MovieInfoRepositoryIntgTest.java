@@ -117,4 +117,32 @@ class MovieInfoRepositoryIntgTest {
                 .expectNextCount(2)
                 .verifyComplete();
     }
+
+    @Test
+    void findByYear() {
+        //given
+
+        //when
+        var moviesInfoFlux = movieInfoRepository.findByYear(2005).log();
+
+        //then
+        StepVerifier.create(moviesInfoFlux)
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void findByName() {
+        //given
+
+        //when
+        var moviesInfoMono = movieInfoRepository.findByName("Dark Knight Rises").log();
+
+        //then
+        StepVerifier.create(moviesInfoMono)
+                .assertNext(movieInfo -> {
+                    assertEquals("Dark Knight Rises", movieInfo.getName());
+                })
+                .verifyComplete();
+    }
 }

@@ -3,13 +3,16 @@ package com.reactivespring.moviesinfoservice.controller;
 import com.reactivespring.moviesinfoservice.domain.MovieInfo;
 import com.reactivespring.moviesinfoservice.service.MoviesInfoService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/v1")
+@Slf4j
 public class MoviesInfoController {
 
     private MoviesInfoService moviesInfoService;
@@ -20,13 +23,22 @@ public class MoviesInfoController {
 
     @GetMapping("/movieInfos")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<MovieInfo> getAllMovieInfos() {
+    public Flux<MovieInfo> getAllMovieInfos(@RequestParam(value = "year",  required = false) Integer year) {
+        log.info("Year is : " + year);
+
+        if (year != null) {
+            return moviesInfoService.getMovieInfoByYear(year).log();
+        }
+
         return moviesInfoService.getAllMovieInfos().log();
     }
 
     @GetMapping("/movieInfos/{movieInfoId}")
-    public Mono<MovieInfo> getMovieInfoById(@PathVariable String movieInfoId) {
-        return moviesInfoService.getMovieInfoById(movieInfoId).log();
+    public Mono<ResponseEntity<MovieInfo>> getMovieInfoById(@PathVariable String movieInfoId) {
+        return moviesInfoService.getMovieInfoById(movieInfoId)
+                .map(movieInfo1 -> ResponseEntity.ok().body(movieInfo1))
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .log();
     }
 
     @PostMapping("/movieInfos")
@@ -36,8 +48,11 @@ public class MoviesInfoController {
     }
 
     @PutMapping("/movieInfos/{movieInfoId}")
-    public Mono<MovieInfo> updateMovieInfo(@PathVariable String movieInfoId, @RequestBody MovieInfo movieInfo) {
-        return moviesInfoService.updateMovieInfo(movieInfoId, movieInfo).log();
+    public Mono<ResponseEntity<MovieInfo>> updateMovieInfo(@PathVariable String movieInfoId, @RequestBody MovieInfo movieInfo) {
+        return moviesInfoService.updateMovieInfo(movieInfoId, movieInfo)
+                .map(ResponseEntity.ok()::body)
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()))
+                .log();
     }
 
     @DeleteMapping("movieInfos/{movieInfoId}")
