@@ -139,14 +139,7 @@ class MoviesInfoControllerIntgTest {
                 .exchange()
                 .expectStatus()
                 .isNoContent()
-//                .expectBody(MovieInfo.class)
-//                .consumeWith(movieInfoEntityExchangeResult -> {
-//                    var getMovieInfoById = movieInfoEntityExchangeResult.getResponseBody();
-//                    assert getMovieInfoById != null;
-//                    assertEquals("Dark Knight Rises", getMovieInfoById.getName());
-//                });
                 .expectBody()
                 .isEmpty();
-//                .jsonPath("$.name").isEqualTo("Dark Knight Rises");
     }
 }
