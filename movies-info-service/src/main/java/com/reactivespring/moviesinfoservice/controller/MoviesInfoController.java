@@ -23,11 +23,20 @@ public class MoviesInfoController {
 
     @GetMapping("/movieInfos")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<MovieInfo> getAllMovieInfos(@RequestParam(value = "year",  required = false) Integer year) {
-        log.info("Year is : " + year);
+    public Flux<MovieInfo> getAllMovieInfos(
+            @RequestParam(value = "year",  required = false) Integer year,
+            @RequestParam(value = "name", required = false) String name) {
+
+        log.info("Year is : {}", year);
+        log.info("Name is : {}", name);
 
         if (year != null) {
             return moviesInfoService.getMovieInfoByYear(year).log();
+        }
+
+        if (name != null) {
+            return moviesInfoService.getMovieInfoByName(name) // Mono<MovieInfo>
+                    .flux(); // wrap Mono in Flux so test expecting list still passes
         }
 
         return moviesInfoService.getAllMovieInfos().log();
