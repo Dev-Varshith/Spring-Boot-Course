@@ -42,7 +42,7 @@ dependencies {
 
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.11.0'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.5.3'
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
